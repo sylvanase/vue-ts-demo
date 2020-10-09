@@ -78,16 +78,23 @@ const router = new VueRouter({
 // from： 哪里来的路由信息
 // next： 同行的标志
 router.beforeEach((to, from, next) => {
+  // next()
   // to.matched是一个数组（匹配到是路由记录）
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if(!store.state.user) {
       next({
-        name: 'login'
+        name: 'Login',
+        query: {
+          // 将登录成功需要返回的页面告知登录页
+          redirect: to.fullPath
+        }
       })
     } else {
       // 路由守卫必须调用next，否则无法正常跳转
       next()
     }
+  } else {
+    next()
   }
 })
 

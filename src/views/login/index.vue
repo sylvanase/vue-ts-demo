@@ -78,10 +78,8 @@ export default Vue.extend({
           return this.$message.error(data.message)
         }
         this.$store.commit('setUser', data.content)
-        //    成功：跳转到首页
-        this.$router.push({
-          name: 'home'
-        })
+        // 成功：跳转到对应页
+        this.$router.push(this.$route.query.redirect as string || '/')
         this.$message.success('登录成功')
       } catch (err) {
         console.log('登录失败', err)
