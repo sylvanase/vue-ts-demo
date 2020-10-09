@@ -1,14 +1,12 @@
 <template>
-  <div class="404">
-    <h1>404 Not Found.</h1>
-  </div>
+  <div class="user">用户管理</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 
 export default Vue.extend({
-  name: 'NotFound'
+  name: 'UserIndex'
 })
 </script>
 
