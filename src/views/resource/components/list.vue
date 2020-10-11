@@ -27,7 +27,7 @@
       </div>
       <div>
         <el-button @click="handleAdd()" size="small">添加</el-button>
-        <el-button @click="categoryPage()" size="small">资源分类</el-button>
+        <el-button @click.native="categoryPage" size="small">资源分类</el-button>
       </div>
       <el-divider></el-divider>
       <el-table :data="resources" style="width: 100%" v-loading="loading">
@@ -202,8 +202,9 @@ export default Vue.extend({
     },
     // 资源分类页
     categoryPage() {
+      console.log(1);
       this.$router.push({
-        name: "menu-edit"
+        name: "resource-category"
       });
     },
     async updateResource() {
