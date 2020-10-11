@@ -25,6 +25,11 @@
           </el-form-item>
         </el-form>
       </div>
+      <div>
+        <el-button @click="handleAdd()" size="small">添加</el-button>
+        <el-button @click="categoryPage()" size="small">资源分类</el-button>
+      </div>
+      <el-divider></el-divider>
       <el-table :data="resources" style="width: 100%" v-loading="loading">
         <el-table-column prop="id" label="编号"></el-table-column>
         <el-table-column prop="name" label="资源名称"></el-table-column>
@@ -53,12 +58,51 @@
         :total="total"
       ></el-pagination>
     </el-card>
+    <!-- 新增和编辑 -->
+    <el-dialog
+      :title="title"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose"
+      close-on-click-modal
+    >
+      <el-form ref="form" :model="form" label-width="80px">
+        <el-form-item label="资源名称" prop="name">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="资源路径" prop="url">
+          <el-input v-model="form.url"></el-input>
+        </el-form-item>
+        <el-form-item label="资源分类" prop="categoryId">
+          <el-select v-model="form.categoryId" placeholder="全部" clearable>
+            <el-option
+              v-for="item in categoryData"
+              :label="item.name"
+              :value="item.id"
+              :key="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="描述" prop="description">
+          <el-input type="textarea" v-model="form.description"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updateResource">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { getResourcePages, categories } from "@/services/resource";
+import {
+  getResourcePages,
+  categories,
+  delResources,
+  editResources
+} from "@/services/resource";
 
 export default Vue.extend({
   name: "ResourceList",
@@ -74,7 +118,10 @@ export default Vue.extend({
       },
       total: 0,
       categoryData: [],
-      loading: false
+      loading: false,
+      dialogVisible: false,
+      form: { id: 0, name: "", url: "", categoryId: 1, description: "" },
+      title: "添加资源"
     };
   },
   created() {
@@ -98,30 +145,31 @@ export default Vue.extend({
     async loadResources() {
       this.loading = true;
       const { data } = await getResourcePages(this.formInline);
-
       this.loading = false;
-
       this.resources = data.data.records;
       this.total = data.data.total;
     },
     handleEdit(item: any) {
-      this.$router.push({
-        name: "menu-edit",
-        params: {
-          id: item.id
-        }
-      });
+      this.title = "编辑资源";
+      this.form = {
+        id: item.id,
+        name: item.name,
+        url: item.url,
+        categoryId: item.categoryId,
+        description: item.description
+      };
+      this.dialogVisible = true;
     },
     handleDelete(item: any) {
       this.$confirm("确认删除该资源吗？", "删除提示", {})
         .then(async () => {
           // 确认删除
-          // const { data } = await delMenu(item.id);
-          // if (data.code === "000000") {
-          //   // 删除成功需要刷新列表
-          //   this.$message.success("删除成功");
-          //   this.loadAllMenus();
-          // }
+          const { data } = await delResources(item.id);
+          if (data.code === "000000") {
+            // 删除成功需要刷新列表
+            this.$message.success("删除成功");
+            this.loadResources();
+          }
         })
         .catch(err => {
           this.$message.warning("取消删除");
@@ -135,6 +183,38 @@ export default Vue.extend({
     handleCurrentChange(val: number) {
       this.formInline.current = val;
       this.loadResources();
+    },
+    // 添加资源
+    handleAdd() {
+      this.dialogVisible = true;
+      console.log(this.form);
+    },
+    handleClose() {
+      this.form = {
+        id: 0,
+        name: "",
+        url: "",
+        categoryId: 1,
+        description: ""
+      };
+      // (this.$refs.form as any).resetFields();
+      this.dialogVisible = false;
+    },
+    // 资源分类页
+    categoryPage() {
+      this.$router.push({
+        name: "menu-edit"
+      });
+    },
+    async updateResource() {
+      const formData = { ...this.form };
+      if (formData.id === 0) {
+        delete formData.id;
+      }
+      await editResources(formData);
+      this.dialogVisible = false;
+      // 新增成功刷新表格
+      this.onSubmit();
     }
   }
 });

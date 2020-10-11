@@ -19,3 +19,18 @@ export const categories = () => {
     url: "/boss/resource/category/getAll"
   });
 };
+
+export const delResources = (id: number) => {
+  return request({
+    method: "DELETE",
+    url: `/boss/resource/${id}`
+  });
+};
+
+export const editResources = (data: any) => {
+  return request({
+    method: "POST",
+    url: "/boss/resource/saveOrUpdate",
+    data
+  });
+};
