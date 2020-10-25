@@ -1,4 +1,5 @@
 module.exports = {
+  publicPath: "http://eduboss.lagou.com",
   css: {
     loaderOptions: {
       // 默认情况下 `sass` 选项会同时对 `sass` 和 `scss` 语法同时生效
@@ -13,14 +14,14 @@ module.exports = {
   },
   devServer: {
     proxy: {
-      '/front': {
-        target: 'http://edufront.lagou.com',
+      "/front": {
+        target: "http://edufront.lagou.com",
         changeOrigin: true // 设置请求头中的 host 为 target，防止后端反向代理服务器无法识别
       },
-      '/boss': {
-        target: 'http://eduboss.lagou.com',
+      "/boss": {
+        target: "http://eduboss.lagou.com",
         changeOrigin: true
       }
     }
   }
-}
+};
