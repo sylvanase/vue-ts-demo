@@ -27,3 +27,25 @@ export const editRole = (data: any) => {
     data
   });
 };
+
+export const allocateUserRoles = (data: any) => {
+  return request({
+    method: "POST",
+    url: "/boss/role/allocateUserRoles",
+    data
+  });
+};
+
+export const getRoleAll = () => {
+  return request({
+    method: "GET",
+    url: "/boss/role/all"
+  });
+};
+
+export const getRoleUser = (userId: string | number) => {
+  return request({
+    method: "GET",
+    url: `/boss/role/user/${userId}`
+  });
+};
