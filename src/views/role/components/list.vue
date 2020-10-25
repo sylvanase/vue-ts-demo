@@ -153,13 +153,19 @@ export default Vue.extend({
     // 分配菜单
     handleMenu(item: any) {
       this.$router.push({
-        name: "menu-list"
+        name: "alloc-menu",
+        params: {
+          roleId: item.id
+        }
       });
     },
     // 分配资源
     handleResource(item: any) {
       this.$router.push({
-        name: "menu-list"
+        name: "alloc-resource",
+        params: {
+          roleId: item.id
+        }
       });
     }
   }
