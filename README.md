@@ -1,9 +1,5 @@
 # edu-boss-fed
 
-## 访问地址
-
-https://vue-ts-demo.vercel.app/#/login?redirect=%2F
-
 ## Project setup
 
 ```
