@@ -142,9 +142,8 @@ export default Vue.extend({
     },
     async loadRollUser() {
       const { data } = await getRoleUser(this.userId);
-      console.log(data);
-      data.data.forEach((item: any) => {
-        this.roleIdList.push(item.id as never);
+      this.roleIdList = data.data.map((item: any) => {
+        return item.id;
       });
     },
     async loadRollAll() {
