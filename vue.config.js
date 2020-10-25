@@ -1,5 +1,4 @@
 module.exports = {
-  publicPath: "http://eduboss.lagou.com",
   css: {
     loaderOptions: {
       // 默认情况下 `sass` 选项会同时对 `sass` 和 `scss` 语法同时生效
